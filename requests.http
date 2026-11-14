@@ -1,0 +1,146 @@
+@base = http://127.0.0.1:8080
+
+###
+POST {{base}}/api/users
+Content-Type: application/json
+
+{
+  "name": "Иван",
+  "email": "ivan@example.com"
+}
+
+> {% client.global.set("userId", response.body.id); %}
+
+###
+POST {{base}}/api/devices
+Content-Type: application/json
+
+{
+  "ownerId": {{userId}},
+  "type": "Стиральная машина",
+  "model": "M1",
+  "serialNumber": "SN-001"
+}
+
+> {% client.global.set("deviceId", response.body.id); %}
+
+###
+POST {{base}}/api/repair-orders
+Content-Type: application/json
+
+{
+  "deviceId": {{deviceId}},
+  "malfunction": "Не сливает воду",
+  "laborCost": 1500
+}
+
+> {% client.global.set("orderId", response.body.id); %}
+
+###
+POST {{base}}/api/spare-parts
+Content-Type: application/json
+
+{
+  "name": "Насос",
+  "price": 2500,
+  "stock": 5
+}
+
+> {% client.global.set("partId", response.body.id); %}
+
+###
+POST {{base}}/api/repair-items
+Content-Type: application/json
+
+{
+  "orderId": {{orderId}},
+  "sparePartId": {{partId}},
+  "quantity": 2
+}
+
+> {% client.global.set("itemId", response.body.id); %}
+
+###
+GET {{base}}/api/users
+
+###
+GET {{base}}/api/users/{{userId}}
+
+###
+PATCH {{base}}/api/users/{{userId}}
+Content-Type: application/json
+
+{
+  "name": "Иван Петров"
+}
+
+###
+GET {{base}}/api/devices
+
+###
+GET {{base}}/api/devices/{{deviceId}}
+
+###
+PATCH {{base}}/api/devices/{{deviceId}}
+Content-Type: application/json
+
+{
+  "model": "M2"
+}
+
+###
+GET {{base}}/api/repair-orders
+
+###
+GET {{base}}/api/repair-orders/{{orderId}}
+
+###
+PATCH {{base}}/api/repair-orders/{{orderId}}
+Content-Type: application/json
+
+{
+  "laborCost": 1750
+}
+
+###
+GET {{base}}/api/spare-parts
+
+###
+GET {{base}}/api/spare-parts/{{partId}}
+
+###
+PATCH {{base}}/api/spare-parts/{{partId}}
+Content-Type: application/json
+
+{
+  "price": 2800
+}
+
+###
+GET {{base}}/api/repair-items
+
+###
+GET {{base}}/api/repair-items/{{itemId}}
+
+###
+PATCH {{base}}/api/repair-items/{{itemId}}
+Content-Type: application/json
+
+{
+  "status": "USED"
+}
+
+###
+DELETE {{base}}/api/repair-items/{{itemId}}
+
+###
+DELETE {{base}}/api/spare-parts/{{partId}}
+
+###
+DELETE {{base}}/api/repair-orders/{{orderId}}
+
+###
+DELETE {{base}}/api/devices/{{deviceId}}
+
+###
+DELETE {{base}}/api/users/{{userId}}
